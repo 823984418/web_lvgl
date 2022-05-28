@@ -132,7 +132,7 @@ EMSCRIPTEN_BINDINGS(WebLvgl) {
             .function("set_target", optional_override([](_lv_event_t *o, _lv_obj_t *v) {
                 o->target = v;
             }), allow_raw_pointers())
-            .property("get_code", &_lv_event_t::code);
+            .property("code", &_lv_event_t::code);
 
     function("init", lv_init);
 

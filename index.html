@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh" style="margin: 0;width: 100%;height: 100%;">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="build/webLvgl.js"></script>
+    <script>
+        onload = async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            window.lv = await WebLvgl({
+                canvas: document.querySelector("#canvas"),
+                arguments: [String(innerWidth), String(innerHeight)],
+            });
+            await new Promise(resolve => setTimeout(resolve, 100));
+            c = lv.btn_create(lv.scr_act());
+            lv.obj_add_event_cb(c, (e) => console.log(e), 0);
+            lv.obj_set_size(c, 300, 300);
+            lv.obj_center(c);
+        };
+    </script>
+</head>
+<body style="margin: 0;width: 100%;height: 100%;">
+<canvas id="canvas" style="width: 100%;height: 100%;display: block;"></canvas>
+
+</body>
+</html>

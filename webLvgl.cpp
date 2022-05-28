@@ -138,7 +138,6 @@ EMSCRIPTEN_BINDINGS(WebLvgl) {
             .value("STYLE_CHANGED", LV_EVENT_STYLE_CHANGED)
             .value("LAYOUT_CHANGED", LV_EVENT_LAYOUT_CHANGED)
             .value("GET_SELF_SIZE", LV_EVENT_GET_SELF_SIZE)
-            .value("_LAST", _LV_EVENT_LAST)
             .value("PREPROCESS", LV_EVENT_PREPROCESS);
     // endregion
     // region lv_color_t
@@ -197,9 +196,6 @@ EMSCRIPTEN_BINDINGS(WebLvgl) {
             }))
             .property("code", &_lv_event_t::code);
     // endregion
-
-
-    function("init", lv_init);
 
     function("scr_act", lv_scr_act, allow_raw_pointers());
 

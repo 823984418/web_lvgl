@@ -90,10 +90,33 @@ void base_event_handle(lv_event_t *event) {
     (*jsHandle).operator()(event);
 }
 
-EMSCRIPTEN_BINDINGS(module) {
+EMSCRIPTEN_BINDINGS(WebLvgl) {
 
     enum_<lv_event_code_t>("event_code_t")
             .value("ALL", LV_EVENT_ALL);
+
+    class_<lv_color_t>("color_t")
+            .property("full", &lv_color_t::full)
+            .property("alpha", optional_override([](const lv_color_t &o) {
+                return o.ch.alpha;
+            }), optional_override([](lv_color_t &o, uint8_t v) {
+                o.ch.alpha = v;
+            }))
+            .property("red", optional_override([](const lv_color_t &o) {
+                return o.ch.red;
+            }), optional_override([](lv_color_t &o, uint8_t v) {
+                o.ch.red = v;
+            }))
+            .property("green", optional_override([](const lv_color_t &o) {
+                return o.ch.green;
+            }), optional_override([](lv_color_t &o, uint8_t v) {
+                o.ch.green = v;
+            }))
+            .property("blue", optional_override([](const lv_color_t &o) {
+                return o.ch.blue;
+            }), optional_override([](lv_color_t &o, uint8_t v) {
+                o.ch.blue = v;
+            }));
 
     class_<_lv_obj_t>("obj_t");
     class_<_lv_event_t>("event_t")
@@ -108,7 +131,8 @@ EMSCRIPTEN_BINDINGS(module) {
             }), allow_raw_pointers())
             .function("set_target", optional_override([](_lv_event_t *o, _lv_obj_t *v) {
                 o->target = v;
-            }), allow_raw_pointers());
+            }), allow_raw_pointers())
+            .property("get_code", &_lv_event_t::code);
 
     function("init", lv_init);
 
@@ -117,6 +141,11 @@ EMSCRIPTEN_BINDINGS(module) {
     function("obj_create", lv_obj_create, allow_raw_pointers());
     function("btn_create", lv_btn_create, allow_raw_pointers());
     function("label_create", lv_label_create, allow_raw_pointers());
+    function("color_black", lv_color_black);
+    function("obj_dpx", lv_obj_dpx, allow_raw_pointers());
+    function("obj_set_style_bg_color", lv_obj_set_style_bg_color, allow_raw_pointers());
+    function("obj_get_index", lv_obj_get_index, allow_raw_pointers());
+    function("obj_get_child", lv_obj_get_child, allow_raw_pointers());
 
     function("obj_add_event_cb", optional_override([](lv_obj_t *obj, val event_cb, lv_event_code_t filter) {
         lv_obj_add_event_cb(obj, base_event_handle, filter, new val(event_cb));

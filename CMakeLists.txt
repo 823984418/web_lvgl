@@ -10,7 +10,7 @@ add_subdirectory(lv_drivers)
 add_executable(webLvgl webLvgl.cpp)
 target_compile_options(webLvgl PUBLIC
         -sUSE_SDL=2
-        #        -O3
+        -O3
         )
 
 target_link_libraries(webLvgl lvgl lv_drivers)

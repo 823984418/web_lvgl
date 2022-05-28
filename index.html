@@ -13,7 +13,7 @@
             });
             await new Promise(resolve => setTimeout(resolve, 100));
             c = lv.btn_create(lv.scr_act());
-            lv.obj_add_event_cb(c, (e) => console.log(e.code), 0);
+            lv.obj_add_event_cb(c, (e) => console.log(e), 0);
             lv.obj_set_size(c, 300, 300);
             lv.obj_center(c);
         };

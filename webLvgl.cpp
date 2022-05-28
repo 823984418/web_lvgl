@@ -91,7 +91,7 @@ void base_event_handle(lv_event_t *event) {
 }
 
 EMSCRIPTEN_BINDINGS(WebLvgl) {
-
+    // region lv_event_code_t
     enum_<lv_event_code_t>("event_code_t")
             .value("ALL", LV_EVENT_ALL)
             .value("PRESSED", LV_EVENT_PRESSED)
@@ -140,7 +140,8 @@ EMSCRIPTEN_BINDINGS(WebLvgl) {
             .value("GET_SELF_SIZE", LV_EVENT_GET_SELF_SIZE)
             .value("_LAST", _LV_EVENT_LAST)
             .value("PREPROCESS", LV_EVENT_PREPROCESS);
-
+    // endregion
+    // region lv_color_t
     class_<lv_color_t>("color_t")
             .property("full", &lv_color_t::full)
             .property("alpha", optional_override([](const lv_color_t &o) {
@@ -163,22 +164,40 @@ EMSCRIPTEN_BINDINGS(WebLvgl) {
             }), optional_override([](lv_color_t &o, uint8_t v) {
                 o.ch.blue = v;
             }));
+    // endregion
 
     class_<_lv_obj_t>("obj_t");
+
+    // region _lv_event_t
     class_<_lv_event_t>("event_t")
-            .function("get_current_target", optional_override([](_lv_event_t *o) {
-                return o->current_target;
-            }), allow_raw_pointers())
-            .function("set_current_target", optional_override([](_lv_event_t *o, _lv_obj_t *v) {
-                o->current_target = v;
-            }), allow_raw_pointers())
-            .function("get_target", optional_override([](_lv_event_t *o) {
-                return o->target;
-            }), allow_raw_pointers())
-            .function("set_target", optional_override([](_lv_event_t *o, _lv_obj_t *v) {
-                o->target = v;
-            }), allow_raw_pointers())
+            .property("current_target", optional_override([](const _lv_event_t &o) -> _lv_obj_t & {
+                return *o.current_target;
+            }), optional_override([](_lv_event_t &o, _lv_obj_t &v) {
+                o.current_target = &v;
+            }))
+            .property("target", optional_override([](const _lv_event_t &o) -> _lv_obj_t & {
+                return *o.target;
+            }), optional_override([](_lv_event_t &o, _lv_obj_t &v) {
+                o.target = &v;
+            }))
+            .property("deleted", optional_override([](const _lv_event_t &o) {
+                return o.deleted;
+            }), optional_override([](_lv_event_t &o, uint8_t v) {
+                o.deleted = v;
+            }))
+            .property("stop_processing", optional_override([](const _lv_event_t &o) {
+                return o.stop_processing;
+            }), optional_override([](_lv_event_t &o, uint8_t v) {
+                o.stop_processing = v;
+            }))
+            .property("stop_bubbling", optional_override([](const _lv_event_t &o) {
+                return o.stop_bubbling;
+            }), optional_override([](_lv_event_t &o, uint8_t v) {
+                o.stop_bubbling = v;
+            }))
             .property("code", &_lv_event_t::code);
+    // endregion
+
 
     function("init", lv_init);
 
@@ -192,19 +211,22 @@ EMSCRIPTEN_BINDINGS(WebLvgl) {
     function("obj_set_style_bg_color", lv_obj_set_style_bg_color, allow_raw_pointers());
     function("obj_get_index", lv_obj_get_index, allow_raw_pointers());
     function("obj_get_child", lv_obj_get_child, allow_raw_pointers());
+    function("obj_del", lv_obj_del, allow_raw_pointers());
+    function("obj_del_async", lv_obj_del_async, allow_raw_pointers());
+    function("obj_clean", lv_obj_clean, allow_raw_pointers());
 
-    function("obj_add_event_cb", optional_override([](lv_obj_t *obj, val event_cb, lv_event_code_t filter) {
-        lv_obj_add_event_cb(obj, base_event_handle, filter, new val(event_cb));
-    }), allow_raw_pointers());
+    function("obj_add_event_cb", optional_override([](lv_obj_t &obj, val event_cb, lv_event_code_t filter) {
+        lv_obj_add_event_cb(&obj, base_event_handle, filter, new val(event_cb));
+    }));
     function("obj_set_size", lv_obj_set_size, allow_raw_pointers());
     function("obj_center", lv_obj_center, allow_raw_pointers());
-    function("label_set_text", optional_override([](lv_obj_t *obj, const std::string &text) {
+    function("label_set_text", optional_override([](lv_obj_t &obj, const std::string &text) {
         const char *str = text.c_str();
-        lv_label_set_text(obj, str);
-    }), allow_raw_pointers());
-    function("label_get_text", optional_override([](lv_obj_t *obj) {
-        return std::string(lv_label_get_text(obj));
-    }), allow_raw_pointers());
+        lv_label_set_text(&obj, str);
+    }));
+    function("label_get_text", optional_override([](const lv_obj_t &obj) {
+        return std::string(lv_label_get_text(&obj));
+    }));
 
     function("version_major", lv_version_major);
     function("version_minor", lv_version_minor);

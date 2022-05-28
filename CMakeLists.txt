@@ -21,7 +21,6 @@ target_link_options(webLvgl PUBLIC
         -sMODULARIZE=1
         -lembind
         -sUSE_SDL=2
-        -sFILESYSTEM=0
         -sALLOW_MEMORY_GROWTH=1
         -sALLOW_TABLE_GROWTH=1
         -sLLD_REPORT_UNDEFINED

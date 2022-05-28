@@ -9,18 +9,20 @@
             await new Promise(resolve => setTimeout(resolve, 100));
             window.lv = await WebLvgl({
                 canvas: document.querySelector("#canvas"),
-                arguments: [String(innerWidth), String(innerHeight)],
+                // arguments: [String(innerWidth), String(innerHeight)],
             });
             await new Promise(resolve => setTimeout(resolve, 100));
             c = lv.btn_create(lv.scr_act());
+            t = lv.label_create(c);
+            lv.label_set_text(t, "123");
             lv.obj_add_event_cb(c, (e) => console.log(e), 0);
-            lv.obj_set_size(c, 300, 300);
+            // lv.obj_set_size(c, 300, 300);
             lv.obj_center(c);
         };
     </script>
 </head>
 <body style="margin: 0;width: 100%;height: 100%;">
-<canvas id="canvas" style="width: 100%;height: 100%;display: block;"></canvas>
+<canvas id="canvas" style="display: block;"></canvas>
 
 </body>
 </html>

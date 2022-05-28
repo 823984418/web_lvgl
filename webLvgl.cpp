@@ -69,12 +69,12 @@ int main(int argc, const char *argv[]) {
     if (argc > 1) {
         monitor_hor_res = atoi(argv[1]);
     } else {
-        monitor_hor_res = 1920;
+        monitor_hor_res = 480;
     }
     if (argc > 2) {
         monitor_ver_res = atoi(argv[2]);
     } else {
-        monitor_ver_res = 1080;
+        monitor_ver_res = 320;
     }
     lv_init();
     hal_init();

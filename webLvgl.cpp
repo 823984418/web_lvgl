@@ -5,6 +5,7 @@
 #include <indev/mouse.h>
 #include <indev/mousewheel.h>
 #include <indev/keyboard.h>
+#include <SDL2/SDL_vulkan.h>
 
 _lv_disp_t *disp1;
 int monitor_hor_res;
@@ -66,6 +67,7 @@ void do_loop(void *arg) {
 }
 
 int main(int argc, const char *argv[]) {
+
     if (argc > 1) {
         monitor_hor_res = atoi(argv[1]);
     } else {
@@ -202,6 +204,9 @@ EMSCRIPTEN_BINDINGS(WebLvgl) {
     function("obj_create", lv_obj_create, allow_raw_pointers());
     function("btn_create", lv_btn_create, allow_raw_pointers());
     function("label_create", lv_label_create, allow_raw_pointers());
+    function("textarea_create", lv_textarea_create, allow_raw_pointers());
+    function("keyboard_create", lv_keyboard_create, allow_raw_pointers());
+    function("keyboard_set_textarea", lv_keyboard_set_textarea, allow_raw_pointers());
     function("color_black", lv_color_black);
     function("obj_dpx", lv_obj_dpx, allow_raw_pointers());
     function("obj_set_style_bg_color", lv_obj_set_style_bg_color, allow_raw_pointers());

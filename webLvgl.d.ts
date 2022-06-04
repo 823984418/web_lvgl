@@ -84,6 +84,12 @@ declare module WebLvgl {
 
     function label_create(parent: obj_t): obj_t;
 
+    function textarea_create(parent: obj_t): obj_t;
+
+    function keyboard_create(parent: obj_t): obj_t;
+
+    function keyboard_set_textarea(kb: obj_t, ta: obj_t);
+
     function color_black(): color_t;
 
     function obj_dpx(obj: obj_t, n: number): color_t;
